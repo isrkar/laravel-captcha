@@ -4,3 +4,4 @@
      title="{{ $title }}"
      onclick="this.setAttribute('src','{{ $route }}&_='+Math.random());var captcha=document.getElementById('{{ $input_id }}');if(captcha){captcha.focus()}"
 >
+<input type="hidden" name="c" value="{{$captcha_num}}">

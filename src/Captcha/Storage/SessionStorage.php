@@ -23,6 +23,7 @@ class SessionStorage implements StorageInterface
     public function __construct(Request $request)
     {
         $this->session = $request->session();
+        $this->key .= '_' . $request->c; // concat captcha number with session key
     }
 
     /**
@@ -39,7 +40,7 @@ class SessionStorage implements StorageInterface
     public function pull()
     {
         $code = $this->session->get($this->key);
-        if (! empty($code)) {
+        if (!empty($code)) {
             $this->session->forget($this->key);
         }
 

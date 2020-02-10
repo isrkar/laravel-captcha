@@ -40,9 +40,9 @@ class CaptchaServiceProvider extends ServiceProvider
         $this->app->singleton(Captcha::class, static function (Application $app) {
             $config = $app['config']['bone']['captcha'];
 
-            $storage   = $app->make($config['storage']);
+            $storage = $app->make($config['storage']);
             $generator = $app->make($config['generator']);
-            $code      = $app->make($config['code']);
+            $code = $app->make($config['code']);
 
             return new Captcha($code, $storage, $generator, $config);
         });
@@ -55,12 +55,12 @@ class CaptchaServiceProvider extends ServiceProvider
      */
     protected function registerBladeDirectives()
     {
-        if (! class_exists('\Blade')) {
+        if (!class_exists('\Blade')) {
             return;
         }
 
-        Blade::directive(config('bone.captcha.blade'), static function () {
-            return '<?php echo Igoshev\Captcha\Facades\Captcha::getView() ?>';
+        Blade::directive(config('bone.captcha.blade'), static function ($captcha_number) {
+            return '<?php echo Igoshev\Captcha\Facades\Captcha::getView(' . $captcha_number . ') ?>';
         });
     }
 
@@ -71,8 +71,8 @@ class CaptchaServiceProvider extends ServiceProvider
     {
         $this->app['router']->group([
             'middleware' => config('bone.captcha.middleware', 'web'),
-            'namespace'  => 'Igoshev\Captcha\Controllers',
-            'as'         => 'bone.captcha.'
+            'namespace' => 'Igoshev\Captcha\Controllers',
+            'as' => 'bone.captcha.'
         ], static function ($router) {
             $router->get(config('bone.captcha.routes.image'), 'CaptchaController@image')->name('image');
             $router->get(config('bone.captcha.routes.image_tag'), 'CaptchaController@imageTag')->name('image.tag');

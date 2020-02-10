@@ -48,16 +48,17 @@ class Captcha
         StorageInterface $storage,
         GeneratorInterface $generator,
         array $params
-    ) {
-        $this->code      = $code;
-        $this->storage   = $storage;
+    )
+    {
+        $this->code = $code;
+        $this->storage = $storage;
         $this->generator = $generator;
-        $this->params    = $params;
+        $this->params = $params;
 
         $this->params['background'] = is_array($this->params['background']) ? $this->params['background'] : [$this->params['background']];
-        $this->params['colors']     = is_array($this->params['colors']) ? $this->params['colors'] : [$this->params['colors']];
+        $this->params['colors'] = is_array($this->params['colors']) ? $this->params['colors'] : [$this->params['colors']];
 
-        if (! file_exists($this->params['font'])) {
+        if (!file_exists($this->params['font'])) {
             $this->params['font'] = __DIR__ . '/../resources/fonts/IndiraK.ttf';
         }
     }
@@ -90,7 +91,7 @@ class Captcha
     {
         $correctCode = $this->getCorrectCode();
 
-        if (! empty($correctCode)) {
+        if (!empty($correctCode)) {
             return mb_strtolower($correctCode) === mb_strtolower($code);
         }
 
@@ -99,23 +100,26 @@ class Captcha
 
     /**
      * Get html image tag.
-     *
+     * @param int $captcha_num - number of captcha on current page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getView()
+    public function getView(int $captcha_num = 1)
     {
         $route = route('bone.captcha.image', [], false);
         if (mb_strpos(config('app.url'), 'https://') !== false) {
             $route = secure_url($route);
         }
-        $route .= '?_=' . mt_rand();
+
+        $route .= '?c=' . $captcha_num;
+        $route .= '&_=' . mt_rand();
 
         return view('bone::captcha.image', [
-            'route'    => $route,
-            'title'    => trans('bone::captcha.update_code'),
-            'width'    => config('bone.captcha.width'),
-            'height'   => config('bone.captcha.height'),
+            'route' => $route,
+            'title' => trans('bone::captcha.update_code'),
+            'width' => config('bone.captcha.width'),
+            'height' => config('bone.captcha.height'),
             'input_id' => config('bone.captcha.inputId'),
+            'captcha_num' => $captcha_num
         ]);
     }
 
@@ -124,7 +128,7 @@ class Captcha
      */
     protected function getCorrectCode()
     {
-        if (! isset($this->correctCode)) {
+        if (!isset($this->correctCode)) {
             $this->correctCode = $this->storage->pull();
         }
 
