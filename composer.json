@@ -1,9 +1,9 @@
 {
-    "name": "bonecms/laravel-captcha",
-    "description": "Captcha integration for Laravel",
+    "name": "isrkar/laravel-captcha",
+    "description": "Captcha integration for Laravel. Fork of Dmitriy Igoshev Laravel-Captchpa package",
     "keywords": ["captcha", "laravel captcha"],
     "license": "MIT",
-    "homepage": "https://github.com/igoshev/laravel-captcha",
+    "homepage": "https://github.com/isrkar/laravel-captcha",
     "authors": [
         {
             "name": "Dmitriy Igoshev",
